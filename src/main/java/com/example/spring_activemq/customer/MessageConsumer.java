@@ -1,4 +1,5 @@
 package com.example.spring_activemq.customer;
+import com.example.spring_activemq.util.SysConfigUtil;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import javax.jms.*;
 /**
@@ -10,12 +11,12 @@ import javax.jms.*;
  */
 public class MessageConsumer {
     //定义ActivMQ的连接地址
-    private static final String ACTIVEMQ_URL = "tcp://10.252.22.21:61616";
+    //private static final String ACTIVEMQ_URL = "tcp://10.252.22.21:61616";
     //定义发送消息的队列名称
-    private static final String QUEUE_NAME = "MyMessage";
+   // private static final String QUEUE_NAME = "MyMessage";
     public static void main(String[] args) throws JMSException {
         //创建连接工厂
-        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(ACTIVEMQ_URL);
+        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(SysConfigUtil.getValueByKey("activemq.properties","ACTIVEMQ_URL"));
         //创建连接
         Connection connection = activeMQConnectionFactory.createConnection();
         //打开连接
@@ -23,7 +24,7 @@ public class MessageConsumer {
         //创建会话
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         //创建队列目标
-        Destination destination = session.createQueue(QUEUE_NAME);
+        Destination destination = session.createQueue(SysConfigUtil.getValueByKey("activemq.properties","QUEUE_NAME"));
         //创建消费者
         javax.jms.MessageConsumer consumer = session.createConsumer(destination);
         //创建消费的监听
